@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>rysowanie</title>
+<style>
+    canvas {
+        border: 1px solid black;
+        cursor: crosshair;
+    }
+</style>
+</head>
+<body>
+<canvas id="myCanvas" width="500" height="500"></canvas>
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        var canvas = document.getElementById("myCanvas");
+        var ctx = canvas.getContext("2d");
+        var klikniecia = 0;
+        var zaznaczonePunkty = [];
+
+        canvas.addEventListener("click", function(event) {
+            klikniecia++;
+            var rect = canvas.getBoundingClientRect();
+            var x = event.clientX - rect.left;
+            var y = event.clientY - rect.top;
+            zaznaczonePunkty.push({x: x, y: y});
+            znacznik(x, y);
+
+            if (klikniecia === 4) {
+                narysujTo();
+            }
+        });
+
+        function znacznik(x, y) {
+            ctx.beginPath();
+            ctx.arc(x, y, 2, 0, 2 * Math.PI);
+            ctx.fillStyle = "black";
+            ctx.fill();
+        }
+
+        function narysujTo() {
+            if (zaznaczonePunkty.length < 4) return;
+
+            ctx.beginPath();
+            ctx.moveTo(zaznaczonePunkty[0].x, zaznaczonePunkty[0].y);
+            for (var i = 1; i < 4; i++) {
+                ctx.lineTo(zaznaczonePunkty[i].x, zaznaczonePunkty[i].y);
+            }
+            ctx.closePath();
+            ctx.strokeStyle = "black";
+            ctx.stroke();
+        }
+    });
+</script>
+</body>
+</html>
